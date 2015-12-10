@@ -13,10 +13,10 @@ User should be able to....
 
 
 ##### Models
-![](http://imgur.com/6FpWS8z)
+![](http://i.imgur.com/6FpWS8z.jpg)
 
 ##### Wireframes
-![](http://imgur.com/zuPv6KN)
+![](http://i.imgur.com/zuPv6KN.jpg)
 ##### Milestones
 - Planning
 - Data Models
