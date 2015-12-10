@@ -21,12 +21,7 @@ User should be able to....
 - Planning
 - Data Models
 - Wireframes Implemented
-- Amazon Price Checking Working
-- Base Views Complete
-- User Login
-- Setup OAuth
-- Price Watching Working
-- Getting Screenshot Proof
-- Email Notifications
-- Styling
-- 1.0 Release
+- Spotify OAuth/User login
+- Searching for tracks on the Spotify API
+- Voting system
+- sockets.io
