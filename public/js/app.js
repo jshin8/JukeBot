@@ -16,15 +16,6 @@ function pageLoad() {
       var newJukebot = response;
       console.log(newJukebot);
     });
-    $.ajax({
-		type: 'POST',
-		url: 'https://api.spotify.com/v1/users/{user_id}/playlists',
-		success: function(object, status){
-			that.parseObject(object);
-		},
-	    error: function(object, status){
-	        console.log("There was an error!");
-	    }
-	});
+    
   });
 }

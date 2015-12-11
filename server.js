@@ -74,7 +74,7 @@ app.use(session({
  saveUninitialized: true,
  resave: true,
  secret: 'SuperSecretCookie',
- cookie: { maxAge: 600000 }
+ cookie: { maxAge: 18000000 }
 }));
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
@@ -147,16 +147,21 @@ app.post('/api/jukebots', function (req, res) {
   db.Jukebot.create(newJukebot, function(err, jukebot){
     if (err) { return console.log("create error: " + err); }
     console.log("created ", jukebot.name);
-    res.json(jukebot);
+    // res.json(jukebot);
 	});
 
   // Create a private playlist
 	spotifyApi.createPlaylist(req.body.spotifyID, req.body.spotifyPlaylistName, { 'public' : true })
 	  .then(function(data) {
-	    console.log('Created playlist!');
+	    console.log(res.body);
 	  }, function(err) {
 	    console.log('Something went wrong!', err);
 	  });
+	res.redirect('/'+ req.body.name);  
+});
+
+app.get('/:name', function(req,res){
+	res.render('jukebot.html');
 });
 
 
