@@ -7,5 +7,21 @@
 {% else %}
 	<h2>Hello, {{ user.username }}.</h2>
 	<p>Your email is {{ user.emails[0].value }}</p>
+	 <form method='POST' action='/api/jukebots' id="botmaker">
+      <legend>Create your Jukebot</legend>
+    
+      <div class="form-group">
+        <label for="jukebot-name">Name your Jukebot</label>
+        <input name="name" type="text" class="form-control" id="jukebot-name" placeholder="Jukebot Name">
+
+        <label for="playlist-name">Name your Playlist</label>
+        <input name="spotifyPlaylistName" type="text" class="form-control" id="playlist-name" placeholder="Playlist Name">
+
+        <label for="spotify-id">Spotify ID</label>
+        <input name="spotifyID" type="text" class="form-control" id="spotify-id" value="{{ user.id }}">
+      </div>
+    
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endif %}
 {% endblock %}

@@ -7,9 +7,18 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     swig = require('swig'),
+    SpotifyWebApi = require('spotify-web-api-node'),
     SpotifyStrategy = require('./lib/index').Strategy;
 
 var consolidate = require('consolidate');
+// credentials are optional
+var spotifyApi = new SpotifyWebApi({
+  clientId : '7c0d997aa1764b11a50b0796b1304cbe',
+  clientSecret : 'e0eb14b86b024b8db3eb270df7906d20',
+  redirectUri : 'http://localhost:3000/callback'
+});
+
+
 
 var appKey = '7c0d997aa1764b11a50b0796b1304cbe';
 var appSecret = 'e0eb14b86b024b8db3eb270df7906d20';
@@ -42,6 +51,8 @@ passport.use(new SpotifyStrategy({
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
+    	spotifyApi.setAccessToken(accessToken);
+    	console.log('this is the', accessToken);
       // To keep the example simple, the user's spotify profile is returned to
       // represent the logged-in user. In a typical application, you would want
       // to associate the spotify account with a user record in your database,
@@ -92,7 +103,7 @@ app.get('/login', function(req, res){
 //   the user to spotify.com. After authorization, spotify will redirect the user
 //   back to this application at /auth/spotify/callback
 app.get('/auth/spotify',
-  passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'], showDialog: true}),
+  passport.authenticate('spotify', {scope: ['playlist-modify-public', 'user-read-private'], showDialog: true}),
   function(req, res){
 // The request will be redirected to spotify for authentication, so this
 // function will not be called.
@@ -113,6 +124,45 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
+
+
+
+// API ROUTES
+
+
+// show all jukebots
+// app.get('/api/jukebots', function (req, res) {
+//   db.Jukebot.find(function (err, jukebots) {
+//     res.send(jukebots);
+//   });
+// });
+
+// create new jukebot
+app.post('/api/jukebots', function (req, res) {
+  // create new post with form data (`req.body`)
+  var newJukebot = req.body;
+  console.log(newJukebot);
+  
+  // save new jukebot
+  db.Jukebot.create(newJukebot, function(err, jukebot){
+    if (err) { return console.log("create error: " + err); }
+    console.log("created ", jukebot.name);
+    res.json(jukebot);
+	});
+
+  // Create a private playlist
+	spotifyApi.createPlaylist(req.body.spotifyID, req.body.spotifyPlaylistName, { 'public' : true })
+	  .then(function(data) {
+	    console.log('Created playlist!');
+	  }, function(err) {
+	    console.log('Something went wrong!', err);
+	  });
+});
+
+
+
+
+
 
 app.listen(process.env.PORT || 3000);
 
