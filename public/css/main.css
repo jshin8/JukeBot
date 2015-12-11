@@ -1,3 +1,35 @@
-#page-wrapper {
-	background-color: lightblue;
+body {
+	text-align: center;
+	background-color: #E8E8E8;
+}
+
+
+.showresults {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start; 
+	align-content: flex-start; 
+	}
+.thumbnail{
+	align-self: auto;
+	width: 150px;
+  	height: 250px;
+
+}
+.imagethumb{
+	max-height: 160px;
+	max-width: auto;
+	
+}
+
+
+
+.searchbutton{
+	margin-bottom: 0px;
+	/*vertical-align: bottom;*/
+}
+.showresults{
+	margin-top: 34px;
 }
