@@ -81,7 +81,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static('/public'));
+app.use(express.static('public'));
 
 app.engine('html', consolidate.swig);
 
@@ -160,10 +160,29 @@ app.post('/api/jukebots', function (req, res) {
 	res.redirect('/'+ req.body.name);  
 });
 
+//get jukebot page with unique url(name of jukebot)
 app.get('/:name', function(req,res){
-	res.render('jukebot.html');
+	res.render('jukebot.html', { user: req.user });
 });
 
+
+
+
+// app.post('/searching', function (req, res) {
+//   var newSearch = req.body;
+
+
+
+//   spotifyApi.searchTracks(req.body.search)
+//     .then(function(data) {
+//       var results = data.body.tracks.items[0].name;
+//       console.log(results);
+//       // res.send('jukebot.html', {data: data.body.tracks.items[0]});
+//       // console.log('Search by "Love"', data.body.tracks.items[0]);
+//     }, function(err) {
+//       console.error(err);
+//     });
+// });
 
 
 
