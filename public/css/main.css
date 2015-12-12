@@ -15,12 +15,12 @@ body {
 .thumbnail{
 	align-self: auto;
 	width: 150px;
-  	height: 250px;
+  	height: 200px;
 
 }
 .imagethumb{
-	max-height: 160px;
-	max-width: auto;
+	/*max-height: 160px;
+	max-width: auto;*/
 	
 }
 
