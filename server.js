@@ -136,7 +136,7 @@ app.get('/logout', function(req, res){
 //     res.send(jukebots);
 //   });
 // });
-
+ 
 // create new jukebot
 app.post('/api/jukebots', function (req, res) {
   // create new post with form data (`req.body`)
@@ -153,7 +153,7 @@ app.post('/api/jukebots', function (req, res) {
   // Create a private playlist
 	spotifyApi.createPlaylist(req.body.spotifyID, req.body.spotifyPlaylistName, { 'public' : true })
 	  .then(function(data) {
-	    console.log(res.body);
+	    console.log(data.body.id);
 	  }, function(err) {
 	    console.log('Something went wrong!', err);
 	  });
@@ -167,6 +167,29 @@ app.get('/:name', function(req,res){
 
 
 
+
+// create new track
+app.post('/api/tracks', function (req, res) {
+  // create new post with form data (`req.body`)
+  var newTrack = req.body;
+  console.log(newTrack);
+  
+  // save new track
+  db.Track.create(newTrack, function(err, track){
+    if (err) { return console.log("create error: " + err); }
+    console.log("created ", track.trackName);
+    // console.log("testing", db.jukebot.name);
+     res.json(track);
+  });
+
+  // Add track to playlist
+  // spotifyApi.addTracksToPlaylist('thelinmichael', '5ieJqeLJjjI8iJWaxeBLuK', "spotify:track:4iV5W9uYEdYUVa79Axb7Rh")
+  // .then(function(data) {
+  //   console.log('Added tracks to playlist!');
+  // }, function(err) {
+  //   console.log('Something went wrong!', err);
+  // });
+});
 
 // app.post('/searching', function (req, res) {
 //   var newSearch = req.body;
