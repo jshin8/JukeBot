@@ -7,7 +7,9 @@ var TrackSchema = new Schema({
 	  trackName: String,
 	  album: String,
 	  artist: String,
-	  spotifyTrackURI: String
+	  spotifyTrackURI: String,
+	  sspotifyPlaylistID: String,
+	  sspotifyID: String
 });
 
 // create and export Log model

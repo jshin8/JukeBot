@@ -136,8 +136,7 @@ app.get('/logout', function(req, res){
 //     res.send(jukebots);
 //   });
 // });
-var playlistID;
-var userID;
+
 // create new jukebot
 app.post('/api/jukebots', function (req, res) {
   // create new jukebot with form data (`req.body`)
@@ -161,16 +160,16 @@ app.post('/api/jukebots', function (req, res) {
           console.log("something went wrong bro");
         }
         console.log('da', jukebot);
+	res.redirect('/' + req.body.spotifyID + '/' + req.body.spotifyPlaylistName); 
       });
 
       // userID = req.body.spotifyID;      
       // playlistID = data.body.id;
-	    // console.log(data.body.id);
+      // console.log(data.body.id);
 
     }, function(err) {
       console.log('Something went wrong!', err);
     });
-	res.redirect('/' + req.body.spotifyID + '/' + req.body.spotifyPlaylistName); 
 });
 
 
@@ -188,7 +187,7 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
       console.log(jukebot);
       console.log('loading profile of logged in user');
       
-	   res.render('jukebot.html', { user: req.user });
+	   res.render('jukebot.html', { user: req.user, jukebot:jukebot });
     }
   });
 });
@@ -212,7 +211,7 @@ app.post('/api/tracks', function (req, res) {
   });
 
   // Add track to playlist
-  spotifyApi.addTracksToPlaylist(userID, playlistID, req.body.spotifyTrackURI)
+  spotifyApi.addTracksToPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, req.body.spotifyTrackURI)
   .then(function(data) {
     console.log('Added tracks to playlist!');
   }, function(err) {

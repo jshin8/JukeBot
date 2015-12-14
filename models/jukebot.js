@@ -6,7 +6,6 @@ var Schema = mongoose.Schema;
 var JukebotSchema = new Schema({
 	  spotifyID: String,
 	  spotifyPlaylistID: String,
-	  tracks: [{type: Schema.Types.ObjectId, ref: 'Track'}],
 	  spotifyPlaylistName: String
 });
 
