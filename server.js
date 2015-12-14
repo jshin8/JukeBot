@@ -136,34 +136,63 @@ app.get('/logout', function(req, res){
 //     res.send(jukebots);
 //   });
 // });
- 
+var playlistID;
+var userID;
 // create new jukebot
 app.post('/api/jukebots', function (req, res) {
-  // create new post with form data (`req.body`)
+  // create new jukebot with form data (`req.body`)
   var newJukebot = req.body;
   console.log(newJukebot);
   
   // save new jukebot
   db.Jukebot.create(newJukebot, function(err, jukebot){
     if (err) { return console.log("create error: " + err); }
-    console.log("created ", jukebot.name);
+    console.log("created ", jukebot);
     // res.json(jukebot);
 	});
 
   // Create a private playlist
 	spotifyApi.createPlaylist(req.body.spotifyID, req.body.spotifyPlaylistName, { 'public' : true })
 	  .then(function(data) {
-	    console.log(data.body.id);
-	  }, function(err) {
-	    console.log('Something went wrong!', err);
-	  });
-	res.redirect('/'+ req.body.name);  
+
+      
+      db.Jukebot.findOneAndUpdate({spotifyPlaylistName: req.body.spotifyPlaylistName}, {spotifyPlaylistID: data.body.id}, {new:true}, function(err, jukebot){
+        if(jukebot===null){
+          console.log("something went wrong bro");
+        }
+        console.log('da', jukebot);
+      });
+
+      // userID = req.body.spotifyID;      
+      // playlistID = data.body.id;
+	    // console.log(data.body.id);
+
+    }, function(err) {
+      console.log('Something went wrong!', err);
+    });
+	res.redirect('/' + req.body.spotifyID + '/' + req.body.spotifyPlaylistName); 
 });
 
+
+
+
 //get jukebot page with unique url(name of jukebot)
-app.get('/:name', function(req,res){
-	res.render('jukebot.html', { user: req.user });
+app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
+  db.Jukebot.findOne({spotifyID: req.params.spotifyID, spotifyPlaylistName: req.params.spotifyPlaylistName}, function (err, jukebot) {
+    if (jukebot === null){
+      console.log('database error: ', err);
+      res.redirect('/');
+
+    } else {
+      // render profile template with user's data
+      console.log(jukebot);
+      console.log('loading profile of logged in user');
+      
+	   res.render('jukebot.html', { user: req.user });
+    }
+  });
 });
+
 
 
 
@@ -183,29 +212,14 @@ app.post('/api/tracks', function (req, res) {
   });
 
   // Add track to playlist
-  // spotifyApi.addTracksToPlaylist('thelinmichael', '5ieJqeLJjjI8iJWaxeBLuK', "spotify:track:4iV5W9uYEdYUVa79Axb7Rh")
-  // .then(function(data) {
-  //   console.log('Added tracks to playlist!');
-  // }, function(err) {
-  //   console.log('Something went wrong!', err);
-  // });
+  spotifyApi.addTracksToPlaylist(userID, playlistID, req.body.spotifyTrackURI)
+  .then(function(data) {
+    console.log('Added tracks to playlist!');
+  }, function(err) {
+    console.log('Something went wrong!', err);
+  });
 });
 
-// app.post('/searching', function (req, res) {
-//   var newSearch = req.body;
-
-
-
-//   spotifyApi.searchTracks(req.body.search)
-//     .then(function(data) {
-//       var results = data.body.tracks.items[0].name;
-//       console.log(results);
-//       // res.send('jukebot.html', {data: data.body.tracks.items[0]});
-//       // console.log('Search by "Love"', data.body.tracks.items[0]);
-//     }, function(err) {
-//       console.error(err);
-//     });
-// });
 
 
 

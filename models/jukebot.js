@@ -4,9 +4,9 @@ var Schema = mongoose.Schema;
 
 // define post schema
 var JukebotSchema = new Schema({
-	  name: String,
 	  spotifyID: String,
 	  spotifyPlaylistID: String,
+	  tracks: [{type: Schema.Types.ObjectId, ref: 'Track'}],
 	  spotifyPlaylistName: String
 });
 
