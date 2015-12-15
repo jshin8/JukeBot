@@ -146,7 +146,7 @@ app.post('/api/jukebots', function (req, res) {
   
   // save new jukebot
   db.Jukebot.create(newJukebot, function(err, jukebot){
-    if (err) { return console.log("create error: " + err); }
+    if (err) { return console.log("create jukebot error: " + err); }
     console.log("created ", jukebot);
     // res.json(jukebot);
 	});
@@ -181,7 +181,7 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
     } else {
       // render profile template with user's data
       console.log(jukebot);
-      console.log('loading profile of logged in user');
+      console.log('loading jukebot');
       
 	   res.render('jukebot.html', { user: req.user, jukebot:jukebot });
      // db.Track.find().exec(function(err, tracks){
@@ -196,18 +196,27 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
 
 
 // create new track
-app.post('/api/tracks', function (req, res) {
+app.post('/api/jukebots/:jukebotId/tracks', function (req, res) {
   // create new post with form data (`req.body`)
   var newTrack = req.body;
-  console.log(newTrack);
+  console.log('this is newTrack', newTrack);
+  console.log('this is jukebot._id', req.params.jukebotId);
   
   // save new track
   db.Track.create(newTrack, function(err, track){
-    if (err) { return console.log("create error: " + err); }
+    if (err) { return console.log("create track error: " + err); }
     console.log("created ", track.trackName);
     // console.log("testing", db.jukebot.name);
+     db.Jukebot.findOneAndUpdate({_id: req.params.jukebotId}, {$push:{tracks:track._id}}, {safe:true, upsert:true, new:true}, function(err, jukebot){
+      if(jukebot===null){
+      console.log("something really went wrong bro");
+      }
+      console.log(jukebot, 'with tracks'); 
      res.json(track);
+    });
   });
+
+  
 
   // Add track to playlist
   spotifyApi.addTracksToPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, req.body.spotifyTrackURI)
@@ -220,6 +229,21 @@ app.post('/api/tracks', function (req, res) {
 
 
 
+// var through = require('through2');
+// var LastfmExportStream = require('lastfmexportstream');
+ 
+// var jshin8 = new LastfmExportStream({
+//   apiKey: '6ce885678c6801ed66c70ade6dab113c',
+//   user: 'jshin8',
+//   reverse: 'true',
+//   tracksPerRequest: 2
+// });
+// jshin8
+//   .pipe(through.obj(function (track, enc, callback) {
+//     console.log(track);
+//     callback();
+//   }));
+ 
 
 
 

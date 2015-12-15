@@ -7,7 +7,8 @@ $(document).ready(function(){
 	function createHTML(response) {
 		var spotid = $('#spotid').data().spotid;
 		var spotplid = $('#spotplid').data().spotplid;
-		return "<form method='POST' action='/api/tracks' id= '" + response.id + "'><input name='trackName' type='hidden' id='track-name' value='" + response.name + "'><input name='album' type='hidden' id='album-name' value='" + response.album.name + "'><input name='artist' type='hidden' id='artist-name' value='" + response.artists[0].name  + "'><input name='spotifyTrackURI' type='hidden' id='track-uri' value='" + response.uri + "'><input name='sspotifyID' type='hidden' id='spotifyid' value='" + spotid + "'><input name='sspotifyPlaylistID' type='hidden' id='spotifyplid' value='" + spotplid + "'><button type='submit'><div class='thumbnail' id= '" + response.id + "'>"
+		
+		return "<form id= '" + response.id + "'><input name='trackName' type='hidden' id='track-name' value='" + response.name + "'><input name='album' type='hidden' id='album-name' value='" + response.album.name + "'><input name='artist' type='hidden' id='artist-name' value='" + response.artists[0].name  + "'><input name='spotifyTrackURI' type='hidden' id='track-uri' value='" + response.uri + "'><input name='sspotifyID' type='hidden' id='spotifyid' value='" + spotid + "'><input name='sspotifyPlaylistID' type='hidden' id='spotifyplid' value='" + spotplid + "'><button type='submit'><div class='thumbnail' id= '" + response.id + "'>"
 		+ "<div class = 'imagethumb'><img src='" + response.album.images[2].url + "' width='64' height='64'></div>"
 	    + "<div><h5 class= 'thumbname'>" + response.name + "</h5></div>"
 		+ "<p>" + response.album.name + "<div><h5 class= 'thumbname'>" + response.artists[0].name + "</h5></div><br></p></button></form>";
@@ -31,8 +32,9 @@ $(document).ready(function(){
 					$(".showresults").append(createHTML(listing));
 					
 					$(id).on('submit', function(e){
+						var jukebotid = $('#jukebotid').data().jukebotid;
 						e.preventDefault();
-						$.post('/api/tracks', $(this).serialize(), function(response){
+						$.post('/api/jukebots/'+ jukebotid + '/tracks', $(this).serialize(), function(response){
 							var newTrack=response;
 							console.log(newTrack);
 						$(".showqueue").append(moreHTML(newTrack));
