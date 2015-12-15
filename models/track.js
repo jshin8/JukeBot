@@ -8,8 +8,10 @@ var TrackSchema = new Schema({
 	  album: String,
 	  artist: String,
 	  spotifyTrackURI: String,
+	  voteCount: Number,
 	  sspotifyPlaylistID: String,
-	  sspotifyID: String
+	  sspotifyID: String,
+	  jukebot: [{type: Schema.Types.ObjectId, ref: 'Jukebot'}]
 });
 
 // create and export Log model

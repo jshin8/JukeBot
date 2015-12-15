@@ -52,7 +52,8 @@ passport.use(new SpotifyStrategy({
     // asynchronous verification, for effect...
     process.nextTick(function () {
     	spotifyApi.setAccessToken(accessToken);
-    	console.log('this is the', accessToken);
+      spotifyApi.setRefreshToken(refreshToken);
+    	console.log('this is the accessToken and refreshToken', accessToken, refreshToken);
       // To keep the example simple, the user's spotify profile is returned to
       // represent the logged-in user. In a typical application, you would want
       // to associate the spotify account with a user record in your database,
@@ -150,22 +151,17 @@ app.post('/api/jukebots', function (req, res) {
     // res.json(jukebot);
 	});
 
-  // Create a private playlist
+  // Create a public playlist
 	spotifyApi.createPlaylist(req.body.spotifyID, req.body.spotifyPlaylistName, { 'public' : true })
 	  .then(function(data) {
 
-      
       db.Jukebot.findOneAndUpdate({spotifyPlaylistName: req.body.spotifyPlaylistName}, {spotifyPlaylistID: data.body.id}, {new:true}, function(err, jukebot){
-        if(jukebot===null){
+          if(jukebot===null){
           console.log("something went wrong bro");
-        }
-        console.log('da', jukebot);
-	res.redirect('/' + req.body.spotifyID + '/' + req.body.spotifyPlaylistName); 
+          }
+          console.log('da', jukebot);
+          res.redirect('/' + req.body.spotifyID + '/' + req.body.spotifyPlaylistName); 
       });
-
-      // userID = req.body.spotifyID;      
-      // playlistID = data.body.id;
-      // console.log(data.body.id);
 
     }, function(err) {
       console.log('Something went wrong!', err);
@@ -188,6 +184,9 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
       console.log('loading profile of logged in user');
       
 	   res.render('jukebot.html', { user: req.user, jukebot:jukebot });
+     // db.Track.find().exec(function(err, tracks){
+     //  res.render('jukebot.html', { user: req.user, jukebot:jukebot, tracks:tracks });
+     //  });
     }
   });
 });

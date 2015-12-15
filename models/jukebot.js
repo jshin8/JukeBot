@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 var JukebotSchema = new Schema({
 	  spotifyID: String,
 	  spotifyPlaylistID: String,
-	  spotifyPlaylistName: String
+	  spotifyPlaylistName: String,
+	  tracks: [{type: Schema.Types.ObjectId, ref: 'Track'}]
 });
 
 // create and export Log model
