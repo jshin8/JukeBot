@@ -1,4 +1,5 @@
 var express = require('express'),
+     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require("mongoose"),
     db = require("./models/index"),
@@ -78,9 +79,9 @@ passport.use(new SpotifyStrategy({
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
     process.nextTick(function () {
-    	spotifyApi.setAccessToken(accessToken);
+      spotifyApi.setAccessToken(accessToken);
       spotifyApi.setRefreshToken(refreshToken);
-    	console.log('this is the accessToken and refreshToken', accessToken, refreshToken);
+      console.log('this is the accessToken and refreshToken', accessToken, refreshToken);
       // To keep the example simple, the user's spotify profile is returned to
       // represent the logged-in user. In a typical application, you would want
       // to associate the spotify account with a user record in your database,
@@ -89,7 +90,6 @@ passport.use(new SpotifyStrategy({
     });
   }));
 
-var app = express();
 
 
 // configure Express
