@@ -11,6 +11,33 @@ var express = require('express'),
     SpotifyStrategy = require('./lib/index').Strategy;
 
 var consolidate = require('consolidate');
+
+
+// @SOCKETS
+// require built-in http module and set up an http server with our app
+  // (so we can reuse same server for socket handshake)
+var http = require('http');
+var httpServer = http.Server(app);
+// pull in socket.io module's "Server" constructor
+var ioServer = require('socket.io');
+// create an io server for us to use, and attach it to our http server
+var io = new ioServer(httpServer);
+
+// @SOCKETS
+// listen for a connection event
+io.on('connection', function(socket){
+  console.log('a user was connected');
+   // listen for a custom event type - new chat message
+    socket.on('new track post', function(trackPost){
+      console.log("emit works");
+      console.log(trackPost);
+      io.emit('track post', trackPost);
+ 
+});
+
+});
+
+
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
   clientId : '7c0d997aa1764b11a50b0796b1304cbe',
@@ -63,6 +90,7 @@ passport.use(new SpotifyStrategy({
   }));
 
 var app = express();
+
 
 // configure Express
 app.set('views', __dirname + '/views');
@@ -182,13 +210,13 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
       // render profile template with user's data
       console.log(jukebot);
       console.log('loading jukebot');
-      
+      // console.log('lookhere', jukebot.tracks[0]);
 	   res.render('jukebot.html', { user: req.user, jukebot:jukebot });
-     // db.Track.find().exec(function(err, tracks){
+     // db.Jukebot.findOne().exec(function(err, tracks){
      //  res.render('jukebot.html', { user: req.user, jukebot:jukebot, tracks:tracks });
      //  });
     }
-  });
+  }).populate('tracks').exec(function(err, jukebots){});
 });
 
 
@@ -247,7 +275,12 @@ app.post('/api/jukebots/:jukebotId/tracks', function (req, res) {
 
 
 
-app.listen(process.env.PORT || 3000);
+
+
+
+httpServer.listen(process.env.PORT || 3000, function () {
+  console.log('server started on locahost:3000');
+});
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If

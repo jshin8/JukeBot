@@ -26,6 +26,14 @@
 			<div class='showresults'>
 			</div>	
 			<div class='showqueue'>
+						{% if jukebot.tracks.length > 0 %}
+						{% for track in jukebot.tracks %}
+						<div>
+							{{track.trackName}} - {{track.artist}}
+						</div>
+						{%endfor%}
+						{% endif %}
+
 			
 			</div>
 		</div>

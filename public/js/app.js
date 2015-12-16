@@ -1,5 +1,8 @@
 // CLIENT-SIDE JAVASCRIPT
 // On page load
+var socket = io();
+setTimeout(function(){ console.log(socket.id); }, 500);
+
 $(document).ready(function(){
   console.log('Hey, Earth!');
   // pageLoad();
@@ -15,9 +18,9 @@ $(document).ready(function(){
 	}
 
 	$("#searchstuff").on('submit', function(e){
+		e.preventDefault();
 
 		$(".showresults").empty();
-		e.preventDefault();
 		var search = $("#searchInput").val();
 		var searchType = $("input[name=searchType]:checked").val();
 		console.log(search);
@@ -32,13 +35,15 @@ $(document).ready(function(){
 					$(".showresults").append(createHTML(listing));
 					
 					$(id).on('submit', function(e){
-						var jukebotid = $('#jukebotid').data().jukebotid;
 						e.preventDefault();
+						var jukebotid = $('#jukebotid').data().jukebotid;
 						$.post('/api/jukebots/'+ jukebotid + '/tracks', $(this).serialize(), function(response){
 							var newTrack=response;
 							console.log(newTrack);
+							socket.emit('new track post', newTrack);	
 						$(".showqueue").append(moreHTML(newTrack));
-						});
+						
+					});
 						
 					console.log('ugh',id);
 					});
@@ -46,6 +51,9 @@ $(document).ready(function(){
 				console.log(betterData);
 			}
 		});
+	});
+	socket.on('track post', function(tracks){	
+	$(".showqueue").append(moreHTML(tracks));
 	});
 
 	function moreHTML(response){
