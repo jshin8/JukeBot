@@ -1,5 +1,5 @@
 var express = require('express'),
-     app = express(),
+    app = express(),
     bodyParser = require('body-parser'),
     mongoose = require("mongoose"),
     db = require("./models/index"),
@@ -170,7 +170,7 @@ app.get('/logout', function(req, res){
 app.post('/api/jukebots', function (req, res) {
   // create new jukebot with form data (`req.body`)
   var newJukebot = req.body;
-  console.log(newJukebot);
+  // console.log(newJukebot);
   
   // save new jukebot
   db.Jukebot.create(newJukebot, function(err, jukebot){
@@ -220,32 +220,71 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
 });
 
 
+app.post('/api/jukebots/:jukebotId/order', function (req, res){
+    var updateOrder = req.body;
+    console.log(updateOrder,'lookhere');
+  db.Track.findOne({_id:req.body.trackId}, function(err,track){
+    // var otherTrack = db.Track.findOne({orderNumber: (track.orderNumber-1)});
+    // console.log(otherTrack, 'ughhhh look');
+    if (req.body.orderNumber=='1'){
+      track.orderNumber = track.orderNumber-1;
+      track.save(function(err,newnewTrack){
+        console.log('order number successful?',newnewTrack);
+        // console.log('2',err);
+      });
 
+      //   otherTrack.orderNumber = otherTrack.orderNumber+1;
+      //   otherTrack.save(function(err,otherNewTrack){
+      //   console.log('1',otherNewTrack);
+      //   console.log('2',err);
+      // });
+    }
+    else if (req.body.orderNumber=='2'){
+      orderNumber = orderNumber+1;
+    }
+
+      else { return console.log("update track order error");
+    }
+      console.log("updated track order of ", track);
+      res.json(track);
+  });
+    
+});
 
 
 // create new track
 app.post('/api/jukebots/:jukebotId/tracks', function (req, res) {
   // create new post with form data (`req.body`)
   var newTrack = req.body;
+  newTrack.orderNumber = 0;
   console.log('this is newTrack', newTrack);
-  console.log('this is jukebot._id', req.params.jukebotId);
+  // console.log('this is jukebot._id', req.params.jukebotId);
   
   // save new track
   db.Track.create(newTrack, function(err, track){
     if (err) { return console.log("create track error: " + err); }
-    console.log("created ", track.trackName);
+    console.log("created ", track);
     // console.log("testing", db.jukebot.name);
      db.Jukebot.findOneAndUpdate({_id: req.params.jukebotId}, {$push:{tracks:track._id}}, {safe:true, upsert:true, new:true}, function(err, jukebot){
       if(jukebot===null){
       console.log("something really went wrong bro");
       }
       console.log(jukebot, 'with tracks'); 
-     res.json(track);
-    });
+
+      
+      track.orderNumber = jukebot.tracks.length;
+      track.save(function(err,newnewTrack){
+        console.log('1',newnewTrack);
+        // console.log('2',err);
+      });
+
+
+       
+      res.json(track);
+      });
   });
 
   
-
   // Add track to playlist
   spotifyApi.addTracksToPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, req.body.spotifyTrackURI)
   .then(function(data) {

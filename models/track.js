@@ -8,7 +8,8 @@ var TrackSchema = new Schema({
 	  album: String,
 	  artist: String,
 	  spotifyTrackURI: String,
-	  voteCount: Number,
+	  orderNumber: Number,
+	  spotifyLinkNumber: String,
 	  sspotifyPlaylistID: String,
 	  sspotifyID: String,
 });
