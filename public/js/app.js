@@ -13,7 +13,11 @@ $(document).ready(function(){
 		var spotid = $('#spotid').data().spotid;
 		var spotplid = $('#spotplid').data().spotplid;
 		
-		return "<form id= '" + response.id + "'><input name='trackName' type='hidden' id='track-name' value='" + response.name + "'><input name='album' type='hidden' id='album-name' value='" + response.album.name + "'><input name='artist' type='hidden' id='artist-name' value='" + response.artists[0].name  + "'><input name='spotifyTrackURI' type='hidden' id='track-uri' value='" + response.uri + "'><input name='sspotifyID' type='hidden' id='spotifyid' value='" + spotid + "'><input name='sspotifyPlaylistID' type='hidden' id='spotifyplid' value='" + spotplid + "'><input name='spotifyLinkNumber' type='hidden' id='track-link-number' value='" + response.id + "'><button type='submit'><div class='thumbnail' id= '" + response.id + "'>"
+		return "<form id= '" + response.id + "'><input name='trackName' type='hidden' id='track-name' value='" + response.name + "'>"
+		+ "<input name='album' type='hidden' id='album-name' value='" + response.album.name + "'><input name='artist' type='hidden' id='artist-name' value='" + response.artists[0].name  + "'>"
+		+ "<input name='spotifyTrackURI' type='hidden' id='track-uri' value='" + response.uri + "'><input name='sspotifyID' type='hidden' id='spotifyid' value='" + spotid + "'>"
+		+ "<input name='sspotifyPlaylistID' type='hidden' id='spotifyplid' value='" + spotplid + "'><input name='spotifyLinkNumber' type='hidden' id='track-link-number' value='" + response.id + "'>"
+		+ "<button type='submit'><div class='thumbnail' id= '" + response.id + "'>"
 		+ "<div class = 'imagethumb'><img src='" + response.album.images[2].url + "' width='64' height='64'></div>"
 	    + "<div><h5 class= 'thumbname'>" + response.name + "</h5></div>"
 		+ "<p>" + response.album.name + "<div><h5 class= 'thumbname'>" + response.artists[0].name + "</h5></div><br></p></button></form>";
@@ -64,8 +68,16 @@ $(document).ready(function(){
 
 	function moreHTML(response){
 
-
-		return "<br><div class='" + response.orderNumber + "'><form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'><button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.orderNumber + ". " + response.trackName + " - " + response.artist + "<form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'><button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>";
+		return "<br><div class='" + response.orderNumber + "'><form class='hella' id='" + response.spotifyLinkNumber + "'>"
+		+ "<input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'>"
+		+ "<input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'>"
+		+ "<input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'>"
+		+ "<button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'>"
+		+ "<i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.orderNumber + ". " + response.trackName + " - " + response.artist + "<form class='hella' id='" + response.spotifyLinkNumber + "'>"
+		+ "<input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'>"
+		+ "<input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'>"
+		+ "<input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'>"
+		+ "<button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>";
 	}
 
 	$(document).on('submit', '.hella', function(e){
