@@ -65,7 +65,7 @@ $(document).ready(function(){
 	function moreHTML(response){
 
 console.log(response, 'yayayay');
-		return "<div><form class='hella' id='" + response.spotifyLinkNumber + "'><input name='orderNumber' type='hidden' id='order-number' value='1'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><button type='submit' id='" + response.spotifyLinkNumber + "'><i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.trackName + " - " + response.artist + "<button id='downvote' type='submit'><i class='glyphicon glyphicon-arrow-down'></i></button></div><br>";
+		return "<br><div><form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><button type='submit' id='" + response.spotifyLinkNumber + "'><i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.trackName + " - " + response.artist + "<form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><button type='submit' id='" + response.spotifyLinkNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>";
 	}
 
 	$(document).on('submit', '.hella', function(e){

@@ -222,32 +222,61 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
 
 app.post('/api/jukebots/:jukebotId/order', function (req, res){
     var updateOrder = req.body;
-    console.log(updateOrder,'lookhere');
+    // console.log(updateOrder,'lookhere');
   db.Track.findOne({_id:req.body.trackId}, function(err,track){
-    // var otherTrack = db.Track.findOne({orderNumber: (track.orderNumber-1)});
-    // console.log(otherTrack, 'ughhhh look');
-    if (req.body.orderNumber=='1'){
-      track.orderNumber = track.orderNumber-1;
-      track.save(function(err,newnewTrack){
-        console.log('order number successful?',newnewTrack);
-        // console.log('2',err);
-      });
+    var targetTrack = track;
 
-      //   otherTrack.orderNumber = otherTrack.orderNumber+1;
-      //   otherTrack.save(function(err,otherNewTrack){
-      //   console.log('1',otherNewTrack);
-      //   console.log('2',err);
-      // });
-    }
-    else if (req.body.orderNumber=='2'){
-      orderNumber = orderNumber+1;
-    }
+    if (req.body.ordernumber=='up'){
+      db.Track.findOne().and([
+        {orderNumber: track.orderNumber-1},{sspotifyPlaylistID:req.body.sspotifyPlaylistID}, {_id: { $ne: req.body.trackId}}
+        ]).exec(function (err, results) {
+          console.log(results, 'higher track');
+          var higherTrack = results;
 
-      else { return console.log("update track order error");
-    }
+            higherTrack.orderNumber = higherTrack.orderNumber+1;
+            console.log(higherTrack);
+            higherTrack.save(function(err,newLowerTrack){
+              if (newLowerTrack!==null){
+                console.log('Higher Track successfully lowered', newLowerTrack);
+                targetTrack.orderNumber = targetTrack.orderNumber-1;
+                targetTrack.save(function(err,newTargetTrack){
+                  console.log('Target Track successfully upvoted',newTargetTrack);
+                });
+              } 
+              else { return console.log("update track order error");
+              }
+            });    
+        });
+      }
+
+    if (req.body.ordernumber=='down'){
+      db.Track.findOne().and([
+        {orderNumber: track.orderNumber+1},{sspotifyPlaylistID:req.body.sspotifyPlaylistID}, {_id: { $ne: req.body.trackId}}
+        ]).exec(function (err, results) {
+          console.log(results, 'lower track');
+          var lowerTrack = results;
+
+            lowerTrack.orderNumber = lowerTrack.orderNumber-1;
+            console.log(lowerTrack);
+            lowerTrack.save(function(err,newHigherTrack){
+              if (newHigherTrack!==null){
+                console.log('Lower Track successfully highered', newHigherTrack);
+                targetTrack.orderNumber = targetTrack.orderNumber+1;
+                targetTrack.save(function(err,newTargetTrack){
+                  console.log('Target Track successfully downvoted',newTargetTrack);
+                });
+              } 
+              else { return console.log("update track order error");
+              }
+            });    
+        });
+      }
+    
       console.log("updated track order of ", track);
       res.json(track);
   });
+    
+
     
 });
 
