@@ -41,7 +41,7 @@ $(document).ready(function(){
 						var jukebotid = $('#jukebotid').data().jukebotid;
 						$.post('/api/jukebots/'+ jukebotid + '/tracks', $(this).serialize(), function(response){
 							var newTrack=response;
-							console.log(newTrack);
+							// console.log(newTrack);
 							socket.emit('new track post', newTrack);	
 						// $(".showqueue").append(moreHTML(newTrack));
 						
@@ -64,8 +64,8 @@ $(document).ready(function(){
 
 	function moreHTML(response){
 
-console.log(response, 'yayayay');
-		return "<br><div><form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><button type='submit' id='" + response.spotifyLinkNumber + "'><i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.trackName + " - " + response.artist + "<form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><button type='submit' id='" + response.spotifyLinkNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>";
+
+		return "<br><div class='" + response.orderNumber + "'><form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'><button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.orderNumber + ". " + response.trackName + " - " + response.artist + "<form class='hella' id='" + response.spotifyLinkNumber + "'><input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'><input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'><button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>";
 	}
 
 	$(document).on('submit', '.hella', function(e){
@@ -76,34 +76,22 @@ console.log(response, 'yayayay');
 			$.post('/api/jukebots/'+ jukebotid + '/order', $(this).serialize(), function(response){
 				var updateVote=response;
 				console.log(updateVote);
-				// socket.emit('new track post', newTrack);	
-			
+		// var trackClass = $(this).attr('class');
+		// var targetClass = "div."+trackClass;		
+		// var targetDiv = $(targetClass).html();
+		// 		// socket.emit('new higher vote', targetDiv);	
+		// var higherClass = $(targetClass).closest("div");
+		// var higherDiv = $(higherClass).html();
+
+		// $(targetClass).html(higherDiv);
+
+		// // socket.on('higher vote', function(targetDiv){
+		// $(higherClass).html(targetDiv); 
+		// // });
 			
 
 			});
 	});
-
-	// $('.hella').mouseenter(function(e){
-	// 	e.preventDefault();
-	// 	var yay = $(this).attr('id');
-	// 	console.log(yay);
-	// 	var yays = "#"+yay;
-	// 	$(yays).on('submit', function(e) {
-	// 		e.preventDefault();
-	// 	    console.log('ohyes', this);
-	// 	    var jukebotid = $('#jukebotid').data().jukebotid;
-	// 		$.post('/api/jukebots/'+ jukebotid + '/tracks/order', $(this).serialize(), function(response){
-	// 			var updateVote=response;
-	// 			console.log(updateVote);
-	// 			// socket.emit('new track post', newTrack);	
-			
-			
-
-	// 		});
-
-	// 	}); 
-	// });
-
 
 
 

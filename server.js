@@ -34,8 +34,10 @@ io.on('connection', function(socket){
       console.log(trackPost);
       io.emit('track post', trackPost);
  
-});
-
+    });
+    // socket.on('new higher vote', function(higherVote){
+    //   io.emit('higher vote', higherVote);
+    // });
 });
 
 
@@ -241,6 +243,15 @@ app.post('/api/jukebots/:jukebotId/order', function (req, res){
                 targetTrack.orderNumber = targetTrack.orderNumber-1;
                 targetTrack.save(function(err,newTargetTrack){
                   console.log('Target Track successfully upvoted',newTargetTrack);
+
+                  var options = { "range_length" : 1 };
+                  spotifyApi.reorderTracksInPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, newTargetTrack.orderNumber, newTargetTrack.orderNumber-1, options)
+                    .then(function(data) {
+                      console.log('Tracks reordered in playlist!');
+                    }, function(err) {
+                      console.log('Something went wrong!', err);
+                    });
+
                 });
               } 
               else { return console.log("update track order error");
@@ -264,6 +275,15 @@ app.post('/api/jukebots/:jukebotId/order', function (req, res){
                 targetTrack.orderNumber = targetTrack.orderNumber+1;
                 targetTrack.save(function(err,newTargetTrack){
                   console.log('Target Track successfully downvoted',newTargetTrack);
+
+                  var options = { "range_length" : 1 };
+                  spotifyApi.reorderTracksInPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, newTargetTrack.orderNumber-2, newTargetTrack.orderNumber, options)
+                    .then(function(data) {
+                      console.log('Tracks reordered in playlist!');
+                    }, function(err) {
+                      console.log('Something went wrong!', err);
+                    });
+
                 });
               } 
               else { return console.log("update track order error");
