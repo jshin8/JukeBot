@@ -52,7 +52,7 @@ $(document).ready(function(){
 						
 
 						});
-						
+						$(".showresults").empty();
 						console.log('ugh',id);
 					});
 					
@@ -88,24 +88,16 @@ $(document).ready(function(){
 		var jukebotid = $('#jukebotid').data().jukebotid;
 			$.post('/api/jukebots/'+ jukebotid + '/order', $(this).serialize(), function(response){
 				var updateVote=response;
-				console.log(updateVote);
-		// var trackClass = $(this).attr('class');
-		// var targetClass = "div."+trackClass;		
-		// var targetDiv = $(targetClass).html();
-		// 		// socket.emit('new higher vote', targetDiv);	
-		// var higherClass = $(targetClass).closest("div");
-		// var higherDiv = $(higherClass).html();
-
-		// $(targetClass).html(higherDiv);
-
-		// // socket.on('higher vote', function(targetDiv){
-		// $(higherClass).html(targetDiv); 
-		// // });
-			
-
+				console.log(updateVote, 'what it is');
+				// socket.emit('new vote', updateVote);
+				// $('.showqueue').load('/1211055838/300 .showqueue', function(){
+				// });
 			});
 	});
 
+	// socket.on('vote', function(data){
+	
+	// });
 
 	tinysort('.showqueue > div',{attr: 'class'});
 });
