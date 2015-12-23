@@ -48,7 +48,7 @@ io.on('connection', function(socket){
 var spotifyApi = new SpotifyWebApi({
   clientId : process.env.clientId,
   clientSecret : process.env.clientSecret,
-  redirectUri : 'http://localhost:3000/callback'
+  redirectUri : 'https://jukebot.herokuapp.com/callback'
 });
 
 
@@ -79,7 +79,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SpotifyStrategy({
   clientID: appKey,
   clientSecret: appSecret,
-  callbackURL: 'http://localhost:3000/callback'
+  callbackURL: 'https://jukebot.herokuapp.com/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
