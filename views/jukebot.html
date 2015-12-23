@@ -2,19 +2,19 @@
 
 {% block content %}
 
-<p>hi dudes</p>
+<p>Search tracks by name, album, and/or artist.</p>
 <div>
-<form>
+<!-- <form>
     <input type="radio" id="searchType" name="searchType" value="Track" checked>Track
     <input type="radio" id="searchType" name="searchType" value="Album">Album
     <input type="radio" id="searchType" name="searchType" value="Artist">Artist
-</form>
+</form> -->
 
 <form id = "searchstuff" action = "submit" class="input-group-lg col-lg-8 col-lg-offset-2"> 
 
 	<input type="text" name="search" id="searchInput" class="form-control"><br>
 
-	<button type="submit" class="btn-lg btn-primary ">Search<i class="glyphicon glyphicon-music"></i></button>
+	<button type="submit" class="btn-lg btn-primary ">Search <i class="glyphicon glyphicon-music"></i></button>
 </form>
 </div>
 <p id = 'spotid' data-spotid = '{{jukebot.spotifyID}}'></p>
@@ -28,9 +28,9 @@
 			<div class='showqueue'>
 						{% if jukebot.tracks.length > 0 %}
 						{% for track in jukebot.tracks %}
-						<br><div class='{{track.orderNumber}}'><form id='{{track.spotifyLinkNumber}}' class='hella'><input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='{{track.id}}'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='{{track.sspotifyPlaylistID}}'><input name='sspotifyID' type='hidden' id='sspotify-id' value='{{track.sspotifyID}}'><button type='submit' id='{{track.spotifyLinkNumber}}' class='{{track.orderNumber}}'><i class='glyphicon glyphicon-arrow-up'></i></button></form>
+						<div class='{{track.orderNumber}}'><form id='{{track.spotifyLinkNumber}}' class='hella'><input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='{{track.id}}'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='{{track.sspotifyPlaylistID}}'><input name='sspotifyID' type='hidden' id='sspotify-id' value='{{track.sspotifyID}}'><br><button type='submit' id='{{track.spotifyLinkNumber}}' class='{{track.orderNumber}}'><i class='glyphicon glyphicon-arrow-up'></i></button></form>
 							{{track.orderNumber}}. {{track.trackName}} - {{track.artist}}
-						<form id='{{track.spotifyLinkNumber}}' class='hella'><input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='{{track.id}}'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='{{track.sspotifyPlaylistID}}'><input name='sspotifyID' type='hidden' id='sspotify-id' value='{{track.sspotifyID}}'><button type='submit' id='{{track.spotifyLinkNumber}}' class='{{track.orderNumber}}'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>
+						<form id='{{track.spotifyLinkNumber}}' class='hella'><input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='{{track.id}}'><input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='{{track.sspotifyPlaylistID}}'><input name='sspotifyID' type='hidden' id='sspotify-id' value='{{track.sspotifyID}}'><button type='submit' id='{{track.spotifyLinkNumber}}' class='{{track.orderNumber}}'><i class='glyphicon glyphicon-arrow-down'></i></button><br></form></div>
 						{%endfor%}
 						{% endif %}
 

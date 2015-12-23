@@ -28,11 +28,12 @@ $(document).ready(function(){
 
 		$(".showresults").empty();
 		var search = $("#searchInput").val();
-		var searchType = $("input[name=searchType]:checked").val();
+		// var searchType = $("input[name=searchType]:checked").val();
 		console.log(search);
-		console.log(searchType);
+		// console.log(searchType);
 		$.ajax({
-			url: "https://api.spotify.com/v1/search?q=" + search + '&type=' + searchType + '&limit=5',
+			// url: "https://api.spotify.com/v1/search?q=" + search + '&type=' + searchType + '&limit=5',
+			url: "https://api.spotify.com/v1/search?q=" + search + '&type=track&limit=5',
 			dataType: 'json',
 			success: function(data){
 				var betterData = data.tracks.items;
@@ -68,16 +69,16 @@ $(document).ready(function(){
 
 	function moreHTML(response){
 
-		return "<br><div class='" + response.orderNumber + "'><form class='hella' id='" + response.spotifyLinkNumber + "'>"
+		return "<div class='" + response.orderNumber + "'><form class='hella' id='" + response.spotifyLinkNumber + "'>"
 		+ "<input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'>"
 		+ "<input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'>"
 		+ "<input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'>"
-		+ "<button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'>"
+		+ "<br><button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'>"
 		+ "<i class='glyphicon glyphicon-arrow-up'></i></button></form>" + response.orderNumber + ". " + response.trackName + " - " + response.artist + "<form class='hella' id='" + response.spotifyLinkNumber + "'>"
 		+ "<input name='ordernumber' type='hidden' id='order-number' value='down'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'>"
 		+ "<input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'>"
 		+ "<input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'>"
-		+ "<button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button></form></div><br>";
+		+ "<button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'><i class='glyphicon glyphicon-arrow-down'></i></button><br></form></div>";
 	}
 
 	$(document).on('submit', '.hella', function(e){
@@ -106,7 +107,7 @@ $(document).ready(function(){
 	});
 
 
-
+	tinysort('.showqueue > div',{attr: 'class'});
 });
 
 

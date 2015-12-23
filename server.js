@@ -222,83 +222,6 @@ app.get('/:spotifyID/:spotifyPlaylistName', function(req,res){
 });
 
 
-app.post('/api/jukebots/:jukebotId/order', function (req, res){
-    var updateOrder = req.body;
-    // console.log(updateOrder,'lookhere');
-  db.Track.findOne({_id:req.body.trackId}, function(err,track){
-    var targetTrack = track;
-
-    if (req.body.ordernumber=='up'){
-      db.Track.findOne().and([
-        {orderNumber: track.orderNumber-1},{sspotifyPlaylistID:req.body.sspotifyPlaylistID}, {_id: { $ne: req.body.trackId}}
-        ]).exec(function (err, results) {
-          console.log(results, 'higher track');
-          var higherTrack = results;
-
-            higherTrack.orderNumber = higherTrack.orderNumber+1;
-            console.log(higherTrack);
-            higherTrack.save(function(err,newLowerTrack){
-              if (newLowerTrack!==null){
-                console.log('Higher Track successfully lowered', newLowerTrack);
-                targetTrack.orderNumber = targetTrack.orderNumber-1;
-                targetTrack.save(function(err,newTargetTrack){
-                  console.log('Target Track successfully upvoted',newTargetTrack);
-
-                  var options = { "range_length" : 1 };
-                  spotifyApi.reorderTracksInPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, newTargetTrack.orderNumber, newTargetTrack.orderNumber-1, options)
-                    .then(function(data) {
-                      console.log('Tracks reordered in playlist!');
-                    }, function(err) {
-                      console.log('Something went wrong!', err);
-                    });
-
-                });
-              } 
-              else { return console.log("update track order error");
-              }
-            });    
-        });
-      }
-
-    if (req.body.ordernumber=='down'){
-      db.Track.findOne().and([
-        {orderNumber: track.orderNumber+1},{sspotifyPlaylistID:req.body.sspotifyPlaylistID}, {_id: { $ne: req.body.trackId}}
-        ]).exec(function (err, results) {
-          console.log(results, 'lower track');
-          var lowerTrack = results;
-
-            lowerTrack.orderNumber = lowerTrack.orderNumber-1;
-            console.log(lowerTrack);
-            lowerTrack.save(function(err,newHigherTrack){
-              if (newHigherTrack!==null){
-                console.log('Lower Track successfully highered', newHigherTrack);
-                targetTrack.orderNumber = targetTrack.orderNumber+1;
-                targetTrack.save(function(err,newTargetTrack){
-                  console.log('Target Track successfully downvoted',newTargetTrack);
-
-                  var options = { "range_length" : 1 };
-                  spotifyApi.reorderTracksInPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, newTargetTrack.orderNumber-2, newTargetTrack.orderNumber, options)
-                    .then(function(data) {
-                      console.log('Tracks reordered in playlist!');
-                    }, function(err) {
-                      console.log('Something went wrong!', err);
-                    });
-
-                });
-              } 
-              else { return console.log("update track order error");
-              }
-            });    
-        });
-      }
-    
-      console.log("updated track order of ", track);
-      res.json(track);
-  });
-    
-
-    
-});
 
 
 // create new track
@@ -343,6 +266,86 @@ app.post('/api/jukebots/:jukebotId/tracks', function (req, res) {
   });
 });
 
+
+ //change order of track on playlist
+app.post('/api/jukebots/:jukebotId/order', function (req, res){
+    var updateOrder = req.body;
+    console.log(updateOrder,'lookhere');
+  db.Jukebot.findOne({spotifyPlaylistID:req.body.sspotifyPlaylistID}, function (err,jukebot){
+
+  
+  db.Track.findOne({_id:req.body.trackId}, function(err,track){
+    var targetTrack = track;
+
+    if (req.body.ordernumber=='up' && track.orderNumber!==1){
+      db.Track.findOne().and([
+        {orderNumber: track.orderNumber-1},{sspotifyPlaylistID:req.body.sspotifyPlaylistID}, {_id: { $ne: req.body.trackId}}
+        ]).exec(function (err, results) {
+          console.log(results, 'higher track');
+          var higherTrack = results;
+
+            higherTrack.orderNumber = higherTrack.orderNumber+1;
+            console.log(higherTrack);
+            higherTrack.save(function(err,newLowerTrack){
+              if (newLowerTrack!==null){
+                console.log('Higher Track successfully lowered', newLowerTrack);
+                targetTrack.orderNumber = targetTrack.orderNumber-1;
+                targetTrack.save(function(err,newTargetTrack){
+                  console.log('Target Track successfully upvoted',newTargetTrack);
+
+                  var options = { "range_length" : 1 };
+                  spotifyApi.reorderTracksInPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, newTargetTrack.orderNumber, newTargetTrack.orderNumber-1, options)
+                    .then(function(data) {
+                      console.log('Tracks reordered in playlist!');
+                    }, function(err) {
+                      console.log('Something went wrong!', err);
+                    });
+
+                });
+              } 
+              else { return console.log("update track order error");
+              }
+            });    
+        });
+      }
+
+    if (req.body.ordernumber=='down' && track.orderNumber < jukebot.tracks.length){
+      db.Track.findOne().and([
+        {orderNumber: track.orderNumber+1},{sspotifyPlaylistID:req.body.sspotifyPlaylistID}, {_id: { $ne: req.body.trackId}}
+        ]).exec(function (err, results) {
+          console.log(results, 'lower track');
+          var lowerTrack = results;
+
+            lowerTrack.orderNumber = lowerTrack.orderNumber-1;
+            console.log(lowerTrack);
+            lowerTrack.save(function(err,newHigherTrack){
+              if (newHigherTrack!==null){
+                console.log('Lower Track successfully highered', newHigherTrack);
+                targetTrack.orderNumber = targetTrack.orderNumber+1;
+                targetTrack.save(function(err,newTargetTrack){
+                  console.log('Target Track successfully downvoted',newTargetTrack);
+
+                  var options = { "range_length" : 1 };
+                  spotifyApi.reorderTracksInPlaylist(req.body.sspotifyID, req.body.sspotifyPlaylistID, newTargetTrack.orderNumber-2, newTargetTrack.orderNumber, options)
+                    .then(function(data) {
+                      console.log('Tracks reordered in playlist!');
+                    }, function(err) {
+                      console.log('Something went wrong!', err);
+                    });
+
+                });
+              } 
+              else { return console.log("update track order error");
+              }
+            });    
+        });
+      }
+    
+      console.log("updated track order of ", track);
+      res.json(track);
+  });
+  });    
+});
 
 
 // var through = require('through2');
