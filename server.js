@@ -1,3 +1,4 @@
+require('dotenv').load();
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
@@ -45,15 +46,15 @@ io.on('connection', function(socket){
 
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-  clientId : '7c0d997aa1764b11a50b0796b1304cbe',
-  clientSecret : 'e0eb14b86b024b8db3eb270df7906d20',
+  clientId : process.env.clientId,
+  clientSecret : process.env.clientSecret,
   redirectUri : 'http://localhost:3000/callback'
 });
 
 
 
-var appKey = '7c0d997aa1764b11a50b0796b1304cbe';
-var appSecret = 'e0eb14b86b024b8db3eb270df7906d20';
+var appKey = process.env.appKey;
+var appSecret = process.env.appSecret;
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
