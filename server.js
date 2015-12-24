@@ -48,7 +48,7 @@ io.on('connection', function(socket){
 var spotifyApi = new SpotifyWebApi({
   clientId : process.env.clientId,
   clientSecret : process.env.clientSecret,
-  redirectUri : 'https://jukebot.herokuapp.com/callback'
+  redirectUri : 'http://localhost:3000/callback'
 });
 
 
@@ -79,7 +79,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SpotifyStrategy({
   clientID: appKey,
   clientSecret: appSecret,
-  callbackURL: 'https://jukebot.herokuapp.com/callback'
+  callbackURL: 'http://localhost:3000/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
@@ -297,7 +297,10 @@ app.post('/api/jukebots/:jukebotId/order', function (req, res){
                     console.log('Higher Track successfully lowered', newLowerTrack);
                     targetTrack.orderNumber = targetTrack.orderNumber-1;
                     targetTrack.save(function(err,newTargetTrack){
+                      if (newTargetTrack!==null){
+                        res.json(track);
                       console.log('Target Track successfully upvoted',newTargetTrack);
+                      }
                     });
                   } 
                   else { return console.log("update track order error");
@@ -327,9 +330,10 @@ app.post('/api/jukebots/:jukebotId/order', function (req, res){
                     console.log('Lower Track successfully highered', newHigherTrack);
                     targetTrack.orderNumber = targetTrack.orderNumber+1;
                     targetTrack.save(function(err,newTargetTrack){
-                      console.log('Target Track successfully downvoted',newTargetTrack);
-
-
+                      if (newTargetTrack!==null){
+                        res.json(track);
+                      console.log('Target Track successfully upvoted',newTargetTrack);
+                      }
                     });
                   } 
                   else { return console.log("update track order error");
@@ -342,7 +346,7 @@ app.post('/api/jukebots/:jukebotId/order', function (req, res){
     }
     
       console.log("updated track order of ", track);
-      res.json(track);
+      
   });
   });    
 });
