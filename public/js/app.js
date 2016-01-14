@@ -7,7 +7,22 @@ setTimeout(function(){ console.log(socket.id); }, 500);
 
 $(document).ready(function(){
   console.log('Hey, Earth!');
-  // pageLoad();
+  	
+  	tinysort('.showqueue > div',{attr: 'class'});
+
+ //  	$.each(document.cookie.split(/; */), function()  {
+	//   var splitCookie = this.split('=');
+	//   console.log(splitCookie,'yayayayayay');
+	//   	if(splitCookie!=[]){
+	// 	  var formed = $("input#"+splitCookie[0]).val();
+	// 	  console.log(splitCookie[0],'pikachu');
+	// 	  console.log(formed);
+	// 	  // name is splitCookie[0], value is splitCookie[1]
+	// 	  if (splitCookie[0]==formed){
+	// 	  	console.log('HHHOOOOOOORAY');
+	// 	  }
+	// 	}
+	// });
 
 	function createHTML(response) {
 		var spotid = $('#spotid').data().spotid;
@@ -70,7 +85,7 @@ $(document).ready(function(){
 	function moreHTML(response){
 
 		return "<div class='" + response.orderNumber + "'><form class='hella' id='" + response.spotifyLinkNumber + "'>"
-		+ "<input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='track-id' value='" + response._id + "'>"
+		+ "<input name='ordernumber' type='hidden' id='order-number' value='up'><input name='trackId' type='hidden' id='" + response._id + "' value='" + response._id + "'>"
 		+ "<input name='sspotifyPlaylistID' type='hidden' id='sspotify-playlist-id' value='" + response.sspotifyPlaylistID + "'>"
 		+ "<input name='sspotifyID' type='hidden' id='sspotify-id' value='" + response.sspotifyID + "'>"
 		+ "<br><button type='submit' id='" + response.spotifyLinkNumber + " class='" + response.orderNumber + "'>"
@@ -85,21 +100,28 @@ $(document).ready(function(){
 		e.preventDefault();
 		console.log('click works on button');
 		var trackids = $(this).attr('id');
+		var that = this;
 		var jukebotid = $('#jukebotid').data().jukebotid;
-			$.post('/api/jukebots/'+ jukebotid + '/order', $(this).serialize(), function(response){
-				var updateVote=response;
-				console.log(updateVote, 'what it is');
-				// socket.emit('new vote', updateVote);
-				// $('.showqueue').load('/1211055838/300 .showqueue', function(){
-				// });
-			});
+		$.post('/api/jukebots/'+ jukebotid + '/order', $(this).serialize(), function(response){
+			if (response !== null){
+			var updateVote=response;
+			$(that).children().css( "background-color", "aqua" );
+			console.log(updateVote, 'what it is');
+
+			var whatwhatwhat = $.cookie(updateVote._id);
+			console.log(whatwhatwhat);
+			// socket.emit('new vote', updateVote);
+			// $('.showqueue').load('/1211055838/300 .showqueue', function(){
+			// });
+			}
+		});
 	});
 
 	// socket.on('vote', function(data){
 	
 	// });
 
-	tinysort('.showqueue > div',{attr: 'class'});
+	
 });
 
 

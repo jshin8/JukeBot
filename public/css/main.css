@@ -19,8 +19,8 @@ body {
 
 }
 .imagethumb{
-	/*max-height: 160px;
-	max-width: auto;*/
+	max-height: 160px;
+	max-width: auto;
 	
 }
 
@@ -32,4 +32,8 @@ body {
 }
 .showresults{
 	margin-top: 34px;
+}
+
+.votemarker{
+	color: black;
 }
